@@ -1,26 +1,16 @@
 package com.Models;
 
 public class Schedule {
-    private int Id;
     private String IdSubject;
-    private int IdClass;
+    private String IdClass;
     private String Subject;
     private String Classroom;
 
-    public Schedule(int id, String idSubject, int idClass, String subject, String classroom) {
-        Id = id;
+    public Schedule(String idSubject, String idClass, String subject, String classroom) {
         IdSubject = idSubject;
         IdClass = idClass;
         Subject = subject;
         Classroom = classroom;
-    }
-
-    public int getId() {
-        return Id;
-    }
-
-    public void setId(int id) {
-        Id = id;
     }
 
     public String getIdSubject() {
@@ -31,11 +21,11 @@ public class Schedule {
         IdSubject = idSubject;
     }
 
-    public int getIdClass() {
+    public String getIdClass() {
         return IdClass;
     }
 
-    public void setIdClass(int idClass) {
+    public void setIdClass(String idClass) {
         IdClass = idClass;
     }
 

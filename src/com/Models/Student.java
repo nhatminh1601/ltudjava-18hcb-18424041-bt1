@@ -1,34 +1,18 @@
 package com.Models;
 
 public class Student {
-    private int Id;
-    private String Name;
     private String Mssv;
-    private int IdClass;
+    private String Name;
+    private String IdClass;
     private String Cmnd;
+    private String Password;
 
-    public Student(int id, String name, String mssv, int idClass, String cmnd) {
-        Id = id;
-        Name = name;
+    public Student(String mssv, String name, String idClass, String cmnd, String password) {
         Mssv = mssv;
+        Name = name;
         IdClass = idClass;
         Cmnd = cmnd;
-    }
-
-    public int getId() {
-        return Id;
-    }
-
-    public void setId(int id) {
-        Id = id;
-    }
-
-    public String getName() {
-        return Name;
-    }
-
-    public void setName(String name) {
-        Name = name;
+        Password = password;
     }
 
     public String getMssv() {
@@ -39,11 +23,19 @@ public class Student {
         Mssv = mssv;
     }
 
-    public int getIdClass() {
+    public String getName() {
+        return Name;
+    }
+
+    public void setName(String name) {
+        Name = name;
+    }
+
+    public String getIdClass() {
         return IdClass;
     }
 
-    public void setIdClass(int idClass) {
+    public void setIdClass(String idClass) {
         IdClass = idClass;
     }
 
@@ -53,5 +45,13 @@ public class Student {
 
     public void setCmnd(String cmnd) {
         Cmnd = cmnd;
+    }
+
+    public String getPassword() {
+        return Password;
+    }
+
+    public void setPassword(String password) {
+        Password = password;
     }
 }
