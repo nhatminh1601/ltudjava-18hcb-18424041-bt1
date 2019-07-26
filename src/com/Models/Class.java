@@ -1,19 +1,19 @@
 package com.Models;
 
 public class Class {
-    private int Id;
+    private String Id;
     private String Name;
 
-    public Class(int id, String name) {
+    public Class(String id, String name) {
         Id = id;
         Name = name;
     }
 
-    public int getId() {
+    public String getId() {
         return Id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         Id = id;
     }
 

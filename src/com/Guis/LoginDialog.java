@@ -11,6 +11,7 @@ public class LoginDialog  extends JDialog {
     private JPasswordField passField;
     private JComboBox optionComboBox;
     Button login, exit;
+    MainFrame mainFrame;
 
 
     public LoginDialog(Frame parent) {
@@ -21,6 +22,12 @@ public class LoginDialog  extends JDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.exit(0);
+            }
+        });
+        login.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setVisible(false);
             }
         });
 
