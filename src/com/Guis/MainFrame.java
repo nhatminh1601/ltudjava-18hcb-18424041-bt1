@@ -14,6 +14,9 @@ public class MainFrame extends JFrame {
     private LoginDialog loginDialog;
     private JFileChooser fileChooser;
     private HandleFile handleFile;
+
+    private Toolbar toolbar;
+    private ManagerStudent managerStudent;
     public MainFrame() {
         processVar();
         try {
@@ -21,17 +24,28 @@ public class MainFrame extends JFrame {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        setTitle("Quản Lý Sinh Viên");
         setMinimumSize(new Dimension(700, 400));
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         loginDialog = new LoginDialog(this);
         loginDialog.setVisible(true);
+        // add component
+        AddConponent();
+
         setVisible(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setJMenuBar(createMenuBar());
     }
 
+    private void AddConponent() {
+        add(toolbar,BorderLayout.NORTH);
+        add(managerStudent.getMain(),BorderLayout.CENTER);
+    }
+
     private void processVar() {
         fileChooser = new JFileChooser();
+        toolbar = new Toolbar();
+        managerStudent = new ManagerStudent();
     }
 
     private JMenuBar createMenuBar() {

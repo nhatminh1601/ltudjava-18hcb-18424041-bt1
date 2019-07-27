@@ -5,13 +5,15 @@ public class Student {
     private String Name;
     private String IdClass;
     private String Cmnd;
+    private String Sex;
     private String Password;
 
-    public Student(String mssv, String name, String idClass, String cmnd, String password) {
+    public Student(String mssv, String name, String idClass, String cmnd, String sex, String password) {
         Mssv = mssv;
         Name = name;
         IdClass = idClass;
         Cmnd = cmnd;
+        Sex = sex;
         Password = password;
     }
 
@@ -47,6 +49,14 @@ public class Student {
         Cmnd = cmnd;
     }
 
+    public String getSex() {
+        return Sex;
+    }
+
+    public void setSex(String sex) {
+        Sex = sex;
+    }
+
     public String getPassword() {
         return Password;
     }
@@ -57,6 +67,6 @@ public class Student {
 
     @Override
     public String toString() {
-        return Mssv + "," + Name + "," + IdClass + "," + Cmnd + "," + Password;
+        return Mssv + "," + Name + "," + IdClass + "," + Cmnd + "," + Sex + "," + Password;
     }
 }
