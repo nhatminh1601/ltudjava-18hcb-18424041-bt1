@@ -8,12 +8,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.*;
+import java.util.ArrayList;
 
 public class MainFrame extends JFrame {
     private LoginDialog loginDialog;
     private JFileChooser fileChooser;
     private HandleFile handleFile;
     public MainFrame() {
+        processVar();
         try {
             handleFile = new HandleFile();
         } catch (IOException e) {
@@ -21,13 +23,15 @@ public class MainFrame extends JFrame {
         }
         setMinimumSize(new Dimension(700, 400));
         setExtendedState(JFrame.MAXIMIZED_BOTH);
-
-
         loginDialog = new LoginDialog(this);
         loginDialog.setVisible(true);
         setVisible(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setJMenuBar(createMenuBar());
+    }
+
+    private void processVar() {
+        fileChooser = new JFileChooser();
     }
 
     private JMenuBar createMenuBar() {
@@ -63,6 +67,17 @@ public class MainFrame extends JFrame {
                     System.exit(0);
                 }
 
+            }
+        });
+        importDataItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(fileChooser.showOpenDialog(MainFrame.this) == JFileChooser.APPROVE_OPTION){
+                    String filePath = fileChooser.getSelectedFile().getPath();
+                    File file = new File(filePath);
+                  ArrayList<?> data= handleFile.ReadFile(file);
+                  handleFile.WriterFile(data,handleFile.getFileClass());
+                }
             }
         });
         return menuBar; 

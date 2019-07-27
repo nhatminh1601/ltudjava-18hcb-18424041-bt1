@@ -24,4 +24,9 @@ public class Class {
     public void setName(String name) {
         Name = name;
     }
+
+    @Override
+    public String toString() {
+        return Id + "," + Name;
+    }
 }

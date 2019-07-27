@@ -44,4 +44,9 @@ public class Schedule {
     public void setClassroom(String classroom) {
         Classroom = classroom;
     }
+
+    @Override
+    public String toString() {
+        return IdSubject + "," + IdClass + "," + Subject + "," + Classroom;
+    }
 }

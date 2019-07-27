@@ -94,4 +94,13 @@ public class StudenOfSchedule {
     public void setDiemTong(float diemTong) {
         this.diemTong = diemTong;
     }
+
+    @Override
+    public String toString() {
+        return IdStudent + "," + IdSchedule + "," + name + "," +
+                sex + "," + cmnd + "," + diemGk + "," +
+                diemCk + "," + "," +
+                diemKhac + "," +
+                diemTong;
+    }
 }

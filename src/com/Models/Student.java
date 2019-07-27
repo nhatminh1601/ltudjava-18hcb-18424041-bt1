@@ -54,4 +54,9 @@ public class Student {
     public void setPassword(String password) {
         Password = password;
     }
+
+    @Override
+    public String toString() {
+        return Mssv + "," + Name + "," + IdClass + "," + Cmnd + "," + Password;
+    }
 }
