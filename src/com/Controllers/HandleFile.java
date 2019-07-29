@@ -1,11 +1,22 @@
 package com.Controllers;
 
+import com.Models.*;
+import com.Models.Class;
+
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 
-public class HandleFile {
-    private File fileStudent, fileSchedule, fileClass, fileUser, fileDiem;
+public class HandleFile<T> {
+    private File fileStudent, fileSchedule, fileClass, fileUser, fileDiem, fileLogin;
     private ArrayList<Object> Result;
+    private ArrayList<User> listUser;
+    private ArrayList<Class> listClass;
+    private ArrayList<Schedule> listSchedule;
+    private ArrayList<Student> listStudent;
+    private ArrayList<Login> listLogin;
+    private ArrayList<StudenOfSchedule> ListScores;
+
 
     public HandleFile() throws IOException {
         File dir = new File("File");
@@ -16,7 +27,10 @@ public class HandleFile {
         if (!fileStudent.exists()) {
             fileStudent.createNewFile();
         }
-
+        fileLogin = new File("File/Login.csv");
+        if (!fileLogin.exists()) {
+            fileLogin.createNewFile();
+        }
         fileSchedule = new File("File/Schedule.csv");
         if (!fileSchedule.exists()) {
             fileSchedule.createNewFile();
@@ -37,12 +51,16 @@ public class HandleFile {
 
     public ArrayList<?> ReadFile(File name) {
         Result = new ArrayList<>();
-        Object Data;
+        if(name == fileUser){
+
+        }
+        Object Data,temp;
         BufferedReader reader = null;
         try {
             reader = new BufferedReader(new FileReader(name));
-            while ((Data = reader.readLine()) != null) {
-                Result.add(Data);
+            while ((temp=reader.readLine()) != null) {
+                Data = ((String) temp).split(",");
+                Result.add(Arrays.asList(Data));
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -56,9 +74,168 @@ public class HandleFile {
                     e.printStackTrace();
                 }
             }
-
+            return Result;
         }
-        return Result;
+
+    }
+    public ArrayList<Student> ReadFileStudent() {
+        listStudent = new ArrayList<>();
+        BufferedReader reader = null;
+        Object temp;
+        try {
+            reader = new BufferedReader(new FileReader(fileStudent));
+            while ((temp=reader.readLine()) != null) {
+                String[] Data = ((String) temp).split(",");
+                listStudent.add(new Student(Data[0],Data[1],Data[2],Data[3],Data[4],Data[5]));
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return listStudent;
+        }
+
+    }
+    public ArrayList<com.Models.Class> ReadFileClass() {
+        listClass = new ArrayList<com.Models.Class>();
+        BufferedReader reader = null;
+        Object temp;
+        try {
+            reader = new BufferedReader(new FileReader(fileClass));
+            while ((temp=reader.readLine()) != null) {
+                String[] Data = ((String) temp).split(",");
+                listClass.add(new com.Models.Class(Data[0],Data[1]));
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return listClass;
+        }
+
+    }
+
+    public ArrayList<Schedule> ReadFileSchedule() {
+        listSchedule = new ArrayList<>();
+        BufferedReader reader = null;
+        Object temp;
+        try {
+            reader = new BufferedReader(new FileReader(fileSchedule));
+            while ((temp=reader.readLine()) != null) {
+                String[] Data = ((String) temp).split(",");
+                listSchedule.add(new Schedule(Data[0],Data[1],Data[2],Data[3]));
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return listSchedule;
+        }
+
+    }
+    public ArrayList<User> ReadFileUser() {
+        listUser = new ArrayList<>();
+        BufferedReader reader = null;
+        Object temp;
+        try {
+            reader = new BufferedReader(new FileReader(fileUser));
+            while ((temp=reader.readLine()) != null) {
+                String[] Data = ((String) temp).split(",");
+                listUser.add(new User(Integer.parseInt(Data[0]),Data[1],Data[2]));
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return listUser;
+        }
+
+    }
+    public ArrayList<Login> ReadFileLogin() {
+        listLogin = new ArrayList<>();
+        BufferedReader reader = null;
+        Object temp;
+        try {
+            reader = new BufferedReader(new FileReader(fileLogin));
+            while ((temp=reader.readLine()) != null) {
+                String[] Data = ((String) temp).split(",");
+                listLogin.add(new Login(Data[0],Data[1],Data[2]));
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return listLogin;
+        }
+
+    }
+    public ArrayList<StudenOfSchedule> ReadFileDiem() {
+        ListScores = new ArrayList<>();
+        BufferedReader reader = null;
+        Object temp;
+        try {
+            reader = new BufferedReader(new FileReader(fileSchedule));
+            while ((temp=reader.readLine()) != null) {
+                String[] Data = ((String) temp).split(",");
+                ListScores.add(new StudenOfSchedule(Data[0],Data[1],Data[2],
+                        Float.parseFloat(Data[3]),Float.parseFloat(Data[4]),Float.parseFloat(Data[5]),
+                        Float.parseFloat(Data[6]),Data[7]));
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return ListScores;
+        }
+
     }
     public Boolean WriterFile(ArrayList<?> Data, File Writer){
         BufferedWriter writerFile= null;
@@ -113,13 +290,5 @@ public class HandleFile {
 
     public void setFileDiem(File fileDiem) {
         this.fileDiem = fileDiem;
-    }
-
-    public ArrayList<Object> getResult() {
-        return Result;
-    }
-
-    public void setResult(ArrayList<Object> result) {
-        Result = result;
     }
 }

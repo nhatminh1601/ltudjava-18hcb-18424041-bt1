@@ -4,23 +4,21 @@ public class StudenOfSchedule {
     private String IdStudent;
     private String IdSchedule;
     private String name;
-    private String sex;
-    private String cmnd;
     private float diemGk;
     private float diemCk;
     private float diemKhac;
     private float diemTong;
+    private String ketQua;
 
-    public StudenOfSchedule(String idStudent, String idSchedule, String name, String sex, String cmnd, float diemGk, float diemCk, float diemKhac, float diemTong) {
+    public StudenOfSchedule(String idStudent, String idSchedule, String name, float diemGk, float diemCk, float diemKhac, float diemTong, String ketQua) {
         IdStudent = idStudent;
         IdSchedule = idSchedule;
         this.name = name;
-        this.sex = sex;
-        this.cmnd = cmnd;
         this.diemGk = diemGk;
         this.diemCk = diemCk;
         this.diemKhac = diemKhac;
         this.diemTong = diemTong;
+        this.ketQua = ketQua;
     }
 
     public String getIdStudent() {
@@ -45,22 +43,6 @@ public class StudenOfSchedule {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getSex() {
-        return sex;
-    }
-
-    public void setSex(String sex) {
-        this.sex = sex;
-    }
-
-    public String getCmnd() {
-        return cmnd;
-    }
-
-    public void setCmnd(String cmnd) {
-        this.cmnd = cmnd;
     }
 
     public float getDiemGk() {
@@ -95,12 +77,20 @@ public class StudenOfSchedule {
         this.diemTong = diemTong;
     }
 
+    public String getKetQua() {
+        return ketQua;
+    }
+
+    public void setKetQua(String ketQua) {
+        this.ketQua = ketQua;
+    }
+
     @Override
     public String toString() {
-        return IdStudent + "," + IdSchedule + "," + name + "," +
-                sex + "," + cmnd + "," + diemGk + "," +
+        return IdStudent + "," + IdSchedule + "," + name + ","
+                + diemGk + "," +
                 diemCk + "," + "," +
                 diemKhac + "," +
-                diemTong;
+                diemTong+","+ ketQua;
     }
 }

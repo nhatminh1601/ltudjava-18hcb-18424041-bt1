@@ -1,6 +1,7 @@
 package com.Guis;
-
 import com.Controllers.HandleFile;
+import com.Models.*;
+import com.Models.Class;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,39 +14,68 @@ import java.util.ArrayList;
 public class MainFrame extends JFrame {
     private LoginDialog loginDialog;
     private JFileChooser fileChooser;
-    private HandleFile handleFile;
+    public static HandleFile handleFile;
+
+    public static ArrayList<Class> listClass;
+    public static ArrayList<Student> listStudent;
+    public static ArrayList<Schedule> listSchedule;
+    public static ArrayList<StudenOfSchedule> listScores;
+    public static ArrayList<Login> listLogin;
+    public static ArrayList<User> listUser;
 
     private Toolbar toolbar;
-    private ManagerStudent managerStudent;
-    public MainFrame() {
+    public static ManagerStudent managerStudent;
+    public static ManagerSchedule managerSchedule;
+    public static ManagerScores managerScores;
+    public  MainFrame() {
         processVar();
-        try {
-            handleFile = new HandleFile();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         setTitle("Quản Lý Sinh Viên");
         setMinimumSize(new Dimension(700, 400));
         setExtendedState(JFrame.MAXIMIZED_BOTH);
-        loginDialog = new LoginDialog(this);
-        loginDialog.setVisible(true);
-        // add component
         AddConponent();
+        loginDialog = new LoginDialog(this);
+        //loginDialog.setVisible(true);
+        // add component
 
-        setVisible(true);
+
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setJMenuBar(createMenuBar());
     }
 
     private void AddConponent() {
+        add(managerStudent,BorderLayout.CENTER);
+       // add(managerSchedule,BorderLayout.CENTER);
         add(toolbar,BorderLayout.NORTH);
-        add(managerStudent.getMain(),BorderLayout.CENTER);
+        toolbar = new Toolbar(this);
+
+
+       // managerStudent.setVisible(true);
+        //add(managerSchedule,BorderLayout.CENTER);
+
+
+
     }
 
     private void processVar() {
+        try {
+            handleFile = new HandleFile();
+            listUser = handleFile.ReadFileUser();
+            listClass = handleFile.ReadFileClass();
+            listScores = handleFile.ReadFileDiem();
+            listStudent= handleFile.ReadFileStudent();
+            listSchedule = handleFile.ReadFileSchedule();
+            listLogin = handleFile.ReadFileLogin();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         fileChooser = new JFileChooser();
-        toolbar = new Toolbar();
+        toolbar = new Toolbar(this);
         managerStudent = new ManagerStudent();
+        managerSchedule = new ManagerSchedule();
+        managerScores = new ManagerScores();
+
+
     }
 
     private JMenuBar createMenuBar() {
@@ -95,6 +125,10 @@ public class MainFrame extends JFrame {
             }
         });
         return menuBar; 
+    }
+    public void SwichPanels(){
+        //LayoutMater= (BorderLayout) this.getContentPane().getLayout();
+       // this.remove(LayoutMater.getLayoutComponent(BorderLayout.CENTER));
     }
 
 }

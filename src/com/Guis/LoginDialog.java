@@ -1,23 +1,27 @@
 package com.Guis;
 
+import com.Controllers.HandleLogin;
+import com.Models.Login;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class LoginDialog  extends JDialog {
-    private JLabel nameLabel, passLabel, optionLabel;
+public class LoginDialog extends JDialog {
+    private JLabel nameLabel, passLabel, optionLabel, Error;
     private JTextField nameField;
     private JPasswordField passField;
     private JComboBox optionComboBox;
+    private HandleLogin handleLogin;
     Button login, exit;
-    MainFrame mainFrame;
+
+
 
 
     public LoginDialog(Frame parent) {
         super(parent, "Log In", true);
         layoutComponents();
-
         exit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -27,22 +31,43 @@ public class LoginDialog  extends JDialog {
         login.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                setVisible(false);
+                Login data = handleLogin.compare(passField.getText(), nameField.getText(), optionComboBox.getSelectedIndex());
+                if (data != null) {
+                    setVisible(false);
+                    parent.setVisible(true);
+                }
+                if (data == null) {
+                    Error.setText("Lỗi Đăng Nhập!");
+                    repaint();
+                }
+
             }
         });
+        Login Data= handleLogin.CheckLogin();
+        if(Data!= null){
+            parent.setVisible(true);
+            setVisible(false);
+        }
+        else {
+            setVisible(true);
+        }
 
     }
 
     private void layoutComponents() {
+        handleLogin = new HandleLogin();
 
-        nameLabel =new JLabel("Username: ");
+        nameLabel = new JLabel("Username: ");
         passLabel = new JLabel("Password: ");
         optionLabel = new JLabel("Option: ");
+        Error = new JLabel();
+        Error.setFont(new Font("Courier New", Font.BOLD, 12));
+        Error.setForeground(Color.RED);
 
         nameField = new JTextField(20);
         passField = new JPasswordField(20);
 
-        optionComboBox= new JComboBox();
+        optionComboBox = new JComboBox();
         DefaultComboBoxModel type = new DefaultComboBoxModel();
         type.addElement("Giáo Vụ");
         type.addElement("Học Sinh");
@@ -53,54 +78,60 @@ public class LoginDialog  extends JDialog {
         exit = new Button("EXIT");
 
         setLayout(new GridBagLayout());
-        GridBagConstraints gc= new GridBagConstraints();
-        gc.insets= new Insets(10,0,0,5);
-        gc.fill =GridBagConstraints.NONE;
-        gc.weightx=2;
-        gc.weighty=0;
+        //setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        GridBagConstraints gc = new GridBagConstraints();
+        gc.insets = new Insets(10, 0, 0, 5);
+        gc.fill = GridBagConstraints.NONE;
+        gc.weightx = 2;
+        gc.weighty = 0;
         gc.gridx = 0;
         gc.gridy = 0;
-        gc.anchor=GridBagConstraints.LINE_END;
-        add(nameLabel,gc);
+        gc.anchor = GridBagConstraints.LINE_END;
+        add(nameLabel, gc);
         gc.gridx = 1;
         gc.gridy = 0;
-        gc.anchor=GridBagConstraints.LINE_START;
-        add(nameField,gc);
+        gc.anchor = GridBagConstraints.LINE_START;
+        add(nameField, gc);
 
-        gc.weightx =1;
+        gc.weightx = 1;
         gc.weighty = 0;
         gc.gridx = 0;
         gc.gridy = 1;
-        gc.anchor=GridBagConstraints.LINE_END;
-        add(passLabel,gc);
+        gc.anchor = GridBagConstraints.LINE_END;
+        add(passLabel, gc);
         gc.gridx = 1;
         gc.gridy = 1;
-        gc.anchor=GridBagConstraints.LINE_START;
-        add(passField,gc);
+        gc.anchor = GridBagConstraints.LINE_START;
+        add(passField, gc);
 
-        gc.weightx =1;
+        gc.weightx = 1;
         gc.weighty = 0;
         gc.gridx = 0;
         gc.gridy = 2;
-        gc.anchor=GridBagConstraints.LINE_END;
-        add(optionLabel,gc);
+        gc.anchor = GridBagConstraints.LINE_END;
+        add(optionLabel, gc);
         gc.gridx = 1;
         gc.gridy = 2;
-        gc.anchor=GridBagConstraints.LINE_START;
-        add(optionComboBox,gc);
+        gc.anchor = GridBagConstraints.LINE_START;
+        add(optionComboBox, gc);
 
-        gc.weighty=0.5;
         gc.gridx = 0;
         gc.gridy = 3;
-        gc.anchor=GridBagConstraints.LINE_END;
-        add(login,gc);
+        gc.anchor = GridBagConstraints.LINE_END;
+        add(Error, gc);
+
+        gc.weighty = 0.5;
+        gc.gridx = 0;
+        gc.gridy = 4;
+        gc.anchor = GridBagConstraints.LINE_END;
+        add(login, gc);
         gc.gridx = 1;
-        gc.gridy = 3;
-        gc.anchor=GridBagConstraints.LINE_START;
-        add(exit,gc);
-        setSize(400,300);
+        gc.gridy = 4;
+        gc.anchor = GridBagConstraints.LINE_START;
+        add(exit, gc);
+        setSize(400, 300);
         setBackground(Color.white);
-        setFont(new Font("Helvetica",Font.PLAIN, 18));
+        setFont(new Font("Helvetica", Font.PLAIN, 18));
 
     }
 }
