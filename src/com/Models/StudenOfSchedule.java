@@ -3,22 +3,23 @@ package com.Models;
 public class StudenOfSchedule {
     private String IdStudent;
     private String IdSchedule;
+    private String subject;
     private String name;
     private float diemGk;
     private float diemCk;
     private float diemKhac;
     private float diemTong;
-    private String ketQua;
 
-    public StudenOfSchedule(String idStudent, String idSchedule, String name, float diemGk, float diemCk, float diemKhac, float diemTong, String ketQua) {
+    public StudenOfSchedule(String idStudent, String idSchedule, String subject, String name, float diemGk, float diemCk, float diemKhac, float diemTong) {
         IdStudent = idStudent;
         IdSchedule = idSchedule;
+        this.subject = subject;
         this.name = name;
         this.diemGk = diemGk;
         this.diemCk = diemCk;
         this.diemKhac = diemKhac;
         this.diemTong = diemTong;
-        this.ketQua = ketQua;
+
     }
 
     public String getIdStudent() {
@@ -35,6 +36,14 @@ public class StudenOfSchedule {
 
     public void setIdSchedule(String idSchedule) {
         IdSchedule = idSchedule;
+    }
+
+    public String getSubject() {
+        return subject;
+    }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
     }
 
     public String getName() {
@@ -77,13 +86,6 @@ public class StudenOfSchedule {
         this.diemTong = diemTong;
     }
 
-    public String getKetQua() {
-        return ketQua;
-    }
-
-    public void setKetQua(String ketQua) {
-        this.ketQua = ketQua;
-    }
 
     @Override
     public String toString() {
@@ -91,6 +93,6 @@ public class StudenOfSchedule {
                 + diemGk + "," +
                 diemCk + "," + "," +
                 diemKhac + "," +
-                diemTong+","+ ketQua;
+                diemTong;
     }
 }

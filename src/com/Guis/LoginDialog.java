@@ -38,6 +38,7 @@ public class LoginDialog extends JDialog {
                 }
                 if (data == null) {
                     Error.setText("Lỗi Đăng Nhập!");
+                    JOptionPane.showMessageDialog(null,"Đăng Nhập Thất Bại");
                     repaint();
                 }
 

@@ -21,13 +21,16 @@ public class HandleLogin {
         if(Type==0){
            for(User item: listUser){
                if(item.getName().trim().equals(userName.trim()) && item.getPassword().trim().equals(password.trim())){
+                   listLogin.add(new Login(item.getName(),item.getPassword(), "0"));
                    return new Login(item.getName(),item.getPassword(), "0");
                }
            }
         }
         if(Type == 1){
             for (Student sv: listStudent){
-                if(sv.getName().toString().trim().equals(userName.trim()) && sv.getPassword().trim().equals(password.trim())){
+                if(sv.getMssv().trim().equals(userName.trim()) && sv.getPassword().trim().equals(password.trim())){
+                    keyType=1;
+                    listLogin.add(new Login(sv.getMssv(), sv.getPassword(),"1"));
                     return new Login(sv.getMssv(), sv.getPassword(),"1");
                 }
             }

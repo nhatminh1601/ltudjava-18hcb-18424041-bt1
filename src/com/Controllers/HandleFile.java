@@ -214,12 +214,12 @@ public class HandleFile<T> {
         BufferedReader reader = null;
         Object temp;
         try {
-            reader = new BufferedReader(new FileReader(fileSchedule));
+            reader = new BufferedReader(new FileReader(fileDiem));
             while ((temp=reader.readLine()) != null) {
                 String[] Data = ((String) temp).split(",");
-                ListScores.add(new StudenOfSchedule(Data[0],Data[1],Data[2],
-                        Float.parseFloat(Data[3]),Float.parseFloat(Data[4]),Float.parseFloat(Data[5]),
-                        Float.parseFloat(Data[6]),Data[7]));
+                ListScores.add(new StudenOfSchedule(Data[0],Data[1],Data[2],Data[3],
+                        Float.parseFloat(Data[4]),Float.parseFloat(Data[5]),Float.parseFloat(Data[6]),
+                        Float.parseFloat(Data[7])));
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -241,6 +241,21 @@ public class HandleFile<T> {
         BufferedWriter writerFile= null;
         try {
             writerFile = new BufferedWriter(new FileWriter(Writer));
+            int sz = Data.size();
+            for(int i = 0; i < sz; i++){
+                writerFile.write(Data.get(i).toString() + "\n");
+            }
+            writerFile.close();
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    public Boolean WriterFileStudent(ArrayList<Student> Data){
+        BufferedWriter writerFile= null;
+        try {
+            writerFile = new BufferedWriter(new FileWriter(fileStudent));
             int sz = Data.size();
             for(int i = 0; i < sz; i++){
                 writerFile.write(Data.get(i).toString() + "\n");
