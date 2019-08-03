@@ -91,7 +91,7 @@ public class HandleFile<T> {
         BufferedReader reader = null;
         Object temp;
         try {
-            reader = new BufferedReader(new FileReader(fileStudent));
+            reader = new BufferedReader(new InputStreamReader(new FileInputStream(fileStudent), "UTF8"));
             while ((temp = reader.readLine().replace("\uFEFF", "")) != null) {
                 String[] Data = ((String) temp).split(",");
                 listStudent.add(new Student(Data[0], Data[1], Data[2], Data[3], Data[4], Data[5]));
@@ -125,67 +125,59 @@ public class HandleFile<T> {
         Object temp, lop;
 
         try {
-            reader = new BufferedReader(new FileReader(file));
-            if ((lop = reader.readLine().replace("\uFEFF", "")) != null) {
-                String[] malop = ((String) lop).split(",");
-                classNameS = malop[0];
-                listImClass.add(new Class(malop[0], malop[0]));
+            reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF8"));
+            String[] malop = ((String) reader.readLine()).replace("\uFEFF", "").split(",");
+            classNameS = malop[0];
+            listImClass.add(new Class(malop[0], malop[0]));
+            reader.readLine();
+            System.out.println("pass");
+            while ((temp = reader.readLine()) != null) {
+                System.out.println(temp);
+                String[] Data = ((String) temp).split(",");
+                listImStudent.add(new Student(Data[1], Data[2], malop[0], Data[4], Data[3], Data[1]));
+            }
 
-                for (Class item : listClass) {
-                    for (Class n : listImClass) {
-                        if (n.getId().trim().equals(item.getName())) {
-                            listImClass.remove(n);
-                        }
+            for (Class item : listClass) {
+                for (Class n : listImClass) {
+                    if (n.getId().trim().equals(item.getName())) {
+                        listImClass.remove(n);
+                        break;
                     }
                 }
-                if (listImClass.size() > 0) {
-                    listClass.addAll(listImClass);
-                    WriterFile(listClass, fileClass);
-                }
-
-                reader.readLine();
-                while ((temp = reader.readLine().replace("\uFEFF", "")) != null) {
-                    String[] Data = ((String) temp).split(",");
-                    listImStudent.add(new Student(Data[1], Data[2], malop[0], Data[4], Data[3], Data[1]));
-                }
-
 
             }
-            return false;
+
+            listClass.addAll(listImClass);
+            WriterFile(listClass, fileClass);
+            for (Student item : listStudent) {
+                for (Student n : listImStudent) {
+                    if (n.getMssv().trim().equals(item.getMssv())) {
+                        listImStudent.remove(n);
+                        break;
+                    }
+                }
+            }
+            listStudent.addAll(listImStudent);
+            WriterFile(listStudent, fileStudent);
+            reader.close();
+            return true;
+
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
+            return false;
         } catch (IOException e) {
             e.printStackTrace();
-            return false;
-        } finally {
-
-            try {
-                for (Student item : listStudent) {
-                    for (Student n : listImStudent) {
-                        if (n.getMssv().trim().equals(item.getMssv())) {
-                            listImStudent.remove(n);
-                        }
-                    }
-                }
-                listStudent.addAll(listImStudent);
-                WriterFile(listStudent, fileStudent);
-                reader.close();
-                return true;
-            } catch (IOException e) {
-                e.printStackTrace();
-                return false;
-            }
-
         }
-
+        return true;
     }
+
     public Boolean ReadWriteFileImSchedule(String path) {
         File file = new File(path);
         listSchedule = new ArrayList<>();
         listSchedule = ReadFileSchedule();
         listScores = new ArrayList<>();
-        listScores= ReadFileDiem();
+        listScores = ReadFileDiem();
 
         ArrayList<Schedule> listImSchedule = new ArrayList<>();
         ArrayList<Class> listImClass = new ArrayList<>();
@@ -214,7 +206,7 @@ public class HandleFile<T> {
                 reader.readLine();
                 while ((temp = reader.readLine().replace("\uFEFF", "")) != null) {
                     String[] Data = ((String) temp).split(",");
-                   // listImStudent.add(new Student(Data[1], Data[2], malop[0], Data[4], Data[3], Data[1]));
+                    // listImStudent.add(new Student(Data[1], Data[2], malop[0], Data[4], Data[3], Data[1]));
                 }
 
 
@@ -248,12 +240,13 @@ public class HandleFile<T> {
         }
 
     }
+
     public ArrayList<com.Models.Class> ReadFileClass() {
         listClass = new ArrayList<com.Models.Class>();
         BufferedReader reader = null;
         Object temp;
         try {
-            reader = new BufferedReader(new InputStreamReader(new FileInputStream(fileClass), "UTF-8"));
+            reader = new BufferedReader(new InputStreamReader(new FileInputStream(fileClass), "UTF8"));
             while ((temp = reader.readLine().replace("\uFEFF", "")) != null) {
 
                 String[] Data = ((String) temp).split(",");
@@ -282,7 +275,7 @@ public class HandleFile<T> {
         BufferedReader reader = null;
         Object temp;
         try {
-            reader = new BufferedReader(new FileReader(fileSchedule));
+            reader = new BufferedReader(new InputStreamReader(new FileInputStream(fileSchedule), "UTF8"));
             while ((temp = reader.readLine().replace("\uFEFF", "")) != null) {
                 String[] Data = ((String) temp).split(",");
                 listSchedule.add(new Schedule(Data[0], Data[1], Data[2], Data[3]));
@@ -309,7 +302,7 @@ public class HandleFile<T> {
         BufferedReader reader = null;
         Object temp;
         try {
-            reader = new BufferedReader(new FileReader(fileUser));
+            reader = new BufferedReader(new InputStreamReader(new FileInputStream(fileUser), "UTF8"));
             while ((temp = reader.readLine().replace("\uFEFF", "")) != null) {
                 String[] Data = ((String) temp).split(",");
                 listUser.add(new User(Integer.parseInt(Data[0]), Data[1], Data[2]));
@@ -336,7 +329,7 @@ public class HandleFile<T> {
         BufferedReader reader = null;
         Object temp;
         try {
-            reader = new BufferedReader(new FileReader(fileLogin));
+            reader = new BufferedReader(new InputStreamReader(new FileInputStream(fileLogin), "UTF8"));
             while ((temp = reader.readLine()) != null) {
                 String[] Data = ((String) temp).split(",");
                 listLogin.add(new Login(Data[0], Data[1], Data[2]));
@@ -363,7 +356,7 @@ public class HandleFile<T> {
         BufferedReader reader = null;
         Object temp;
         try {
-            reader = new BufferedReader(new FileReader(fileDiem));
+            reader = new BufferedReader(new InputStreamReader(new FileInputStream(fileDiem), "UTF8"));
             while ((temp = reader.readLine().replace("\uFEFF", "")) != null) {
                 String[] Data = ((String) temp).split(",");
                 ListScores.add(new StudenOfSchedule(Data[0], Data[1], Data[2], Data[3],

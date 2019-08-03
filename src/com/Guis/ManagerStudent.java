@@ -235,7 +235,7 @@ public class ManagerStudent extends JPanel {
             model.removeRow(i);
         }
         for (Student sv : listStudent) {
-            if (sv.getIdClass().toString().trim().equals(classNameS)) {
+            if (sv.getIdClass().toString().trim().equals(listClass.get(txtLopt.getSelectedIndex()).getName().toString().trim())) {
                 String[] row = {sv.getMssv() + " ", sv.getName() + " ", sv.getSex() + " ", sv.getCmnd()};
                 model.addRow(row);
             }
@@ -256,12 +256,15 @@ public class ManagerStudent extends JPanel {
         model.addColumn("Họ Tên");
         model.addColumn("Giới Tính");
         model.addColumn("CMND");
-        for (Student sv : listStudent) {
-            if (sv.getIdClass().toString().trim().equals(listClass.get(0).getName().toString().trim())) {
-                String[] row = {sv.getMssv() + " ", sv.getName() + " ", sv.getSex() + " ", sv.getCmnd()};
-                model.addRow(row);
+        if (listClass.size() > 0) {
+            for (Student sv : listStudent) {
+                if (sv.getIdClass().toString().trim().equals(listClass.get(0).getName().toString().trim())) {
+                    String[] row = {sv.getMssv() + " ", sv.getName() + " ", sv.getSex() + " ", sv.getCmnd()};
+                    model.addRow(row);
+                }
             }
         }
+
         sc = new JScrollPane(tableStudent, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
     }
