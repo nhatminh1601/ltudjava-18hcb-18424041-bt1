@@ -99,6 +99,8 @@ public class ResetPass extends JPanel {
                                 if (item.getMssv().equals(listLogin.get(0).getUserName())) {
                                     item.setPassword(passmoi);
                                     JOptionPane.showMessageDialog(null, "Đổi pass Thành công");
+                                    handleFile.WriterFile(listStudent, handleFile.getFileStudent());
+                                    resetInput();
                                     return;
                                 }
                             }
@@ -108,6 +110,8 @@ public class ResetPass extends JPanel {
                                 if (item.getName().equals(listLogin.get(0).getUserName())) {
                                     item.setPassword(passmoi);
                                     JOptionPane.showMessageDialog(null, "Đổi pass Thành công");
+                                    handleFile.WriterFile(listUser, handleFile.getFileUser());
+                                    resetInput();
                                     return;
                                 }
                             }
@@ -118,5 +122,11 @@ public class ResetPass extends JPanel {
             }
         });
 
+    }
+
+    private void resetInput() {
+        txtpass.setText("");
+        txtpassC.setText("");
+        txtpassnew.setText("");
     }
 }

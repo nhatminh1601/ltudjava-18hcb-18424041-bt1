@@ -22,7 +22,10 @@ public class Toolbar extends JPanel {
         dmmh = new JButton("Quản Lý Thời Khóa Biểu");
         dsl = new JButton("Danh Sách Lớp");
         this.frame= frame;
-
+        listStudent = handleFile.ReadFileStudent();
+        listClass = handleFile.ReadFileClass();
+        listSchedule = handleFile.ReadFileSchedule();
+        listScores = handleFile.ReadFileDiem();
         SetLayout();
         SetAction();
     }

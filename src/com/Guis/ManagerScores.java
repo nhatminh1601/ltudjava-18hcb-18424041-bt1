@@ -58,7 +58,11 @@ public class ManagerScores extends JPanel {
 
     private void Table() {
         model = new DefaultTableModel();
-        tableScores = new JTable();
+        tableScores = new JTable() {
+            public boolean isCellEditable(int rowIndex, int colIndex) {
+                return false;
+            }
+        };
         tableScores.setModel(model);
         model.addColumn("MSSV");
         model.addColumn("Họ tên");

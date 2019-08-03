@@ -4,8 +4,15 @@ import com.Models.*;
 import com.Models.Class;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashSet;
+import java.util.Set;
+
+import static com.Guis.MainFrame.classNameS;
+import static com.Guis.MainFrame.listScores;
+
 
 public class HandleFile<T> {
     private File fileStudent, fileSchedule, fileClass, fileUser, fileDiem, fileLogin;
@@ -51,14 +58,14 @@ public class HandleFile<T> {
 
     public ArrayList<?> ReadFile(File name) {
         Result = new ArrayList<>();
-        if(name == fileUser){
+        if (name == fileUser) {
 
         }
-        Object Data,temp;
+        Object Data, temp;
         BufferedReader reader = null;
         try {
             reader = new BufferedReader(new FileReader(name));
-            while ((temp=reader.readLine()) != null) {
+            while ((temp = reader.readLine()) != null) {
                 Data = ((String) temp).split(",");
                 Result.add(Arrays.asList(Data));
             }
@@ -78,15 +85,16 @@ public class HandleFile<T> {
         }
 
     }
+
     public ArrayList<Student> ReadFileStudent() {
         listStudent = new ArrayList<>();
         BufferedReader reader = null;
         Object temp;
         try {
             reader = new BufferedReader(new FileReader(fileStudent));
-            while ((temp=reader.readLine()) != null) {
+            while ((temp = reader.readLine().replace("\uFEFF", "")) != null) {
                 String[] Data = ((String) temp).split(",");
-                listStudent.add(new Student(Data[0],Data[1],Data[2],Data[3],Data[4],Data[5]));
+                listStudent.add(new Student(Data[0], Data[1], Data[2], Data[3], Data[4], Data[5]));
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -104,15 +112,153 @@ public class HandleFile<T> {
         }
 
     }
+
+    public Boolean ReadWriteFileImStudent(String path) {
+        File file = new File(path);
+        listStudent = new ArrayList<>();
+        listStudent = ReadFileStudent();
+        listClass = new ArrayList<>();
+        listClass = ReadFileClass();
+        ArrayList<Student> listImStudent = new ArrayList<>();
+        ArrayList<Class> listImClass = new ArrayList<>();
+        BufferedReader reader = null;
+        Object temp, lop;
+
+        try {
+            reader = new BufferedReader(new FileReader(file));
+            if ((lop = reader.readLine().replace("\uFEFF", "")) != null) {
+                String[] malop = ((String) lop).split(",");
+                classNameS = malop[0];
+                listImClass.add(new Class(malop[0], malop[0]));
+
+                for (Class item : listClass) {
+                    for (Class n : listImClass) {
+                        if (n.getId().trim().equals(item.getName())) {
+                            listImClass.remove(n);
+                        }
+                    }
+                }
+                if (listImClass.size() > 0) {
+                    listClass.addAll(listImClass);
+                    WriterFile(listClass, fileClass);
+                }
+
+                reader.readLine();
+                while ((temp = reader.readLine().replace("\uFEFF", "")) != null) {
+                    String[] Data = ((String) temp).split(",");
+                    listImStudent.add(new Student(Data[1], Data[2], malop[0], Data[4], Data[3], Data[1]));
+                }
+
+
+            }
+            return false;
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+
+            try {
+                for (Student item : listStudent) {
+                    for (Student n : listImStudent) {
+                        if (n.getMssv().trim().equals(item.getMssv())) {
+                            listImStudent.remove(n);
+                        }
+                    }
+                }
+                listStudent.addAll(listImStudent);
+                WriterFile(listStudent, fileStudent);
+                reader.close();
+                return true;
+            } catch (IOException e) {
+                e.printStackTrace();
+                return false;
+            }
+
+        }
+
+    }
+    public Boolean ReadWriteFileImSchedule(String path) {
+        File file = new File(path);
+        listSchedule = new ArrayList<>();
+        listSchedule = ReadFileSchedule();
+        listScores = new ArrayList<>();
+        listScores= ReadFileDiem();
+
+        ArrayList<Schedule> listImSchedule = new ArrayList<>();
+        ArrayList<Class> listImClass = new ArrayList<>();
+        BufferedReader reader = null;
+        Object temp, lop;
+
+        try {
+            reader = new BufferedReader(new FileReader(file));
+            if ((lop = reader.readLine().replace("\uFEFF", "")) != null) {
+                String[] malop = ((String) lop).split(",");
+                classNameS = malop[0];
+                listImClass.add(new Class(malop[0], malop[0]));
+
+                for (Class item : listClass) {
+                    for (Class n : listImClass) {
+                        if (n.getId().trim().equals(item.getName())) {
+                            listImClass.remove(n);
+                        }
+                    }
+                }
+                if (listImClass.size() > 0) {
+                    listClass.addAll(listImClass);
+                    WriterFile(listClass, fileClass);
+                }
+
+                reader.readLine();
+                while ((temp = reader.readLine().replace("\uFEFF", "")) != null) {
+                    String[] Data = ((String) temp).split(",");
+                   // listImStudent.add(new Student(Data[1], Data[2], malop[0], Data[4], Data[3], Data[1]));
+                }
+
+
+            }
+            return false;
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+
+            try {
+//                for (Student item : listStudent) {
+//                    for (Student n : listImStudent) {
+//                        if (n.getMssv().trim().equals(item.getMssv())) {
+//                            listImStudent.remove(n);
+//                        }
+//                    }
+//                }
+//                listStudent.addAll(listImStudent);
+                WriterFile(listStudent, fileStudent);
+                reader.close();
+                return true;
+            } catch (IOException e) {
+                e.printStackTrace();
+                return false;
+            }
+
+        }
+
+    }
     public ArrayList<com.Models.Class> ReadFileClass() {
         listClass = new ArrayList<com.Models.Class>();
         BufferedReader reader = null;
         Object temp;
         try {
-            reader = new BufferedReader(new FileReader(fileClass));
-            while ((temp=reader.readLine()) != null) {
+            reader = new BufferedReader(new InputStreamReader(new FileInputStream(fileClass), "UTF-8"));
+            while ((temp = reader.readLine().replace("\uFEFF", "")) != null) {
+
                 String[] Data = ((String) temp).split(",");
-                listClass.add(new com.Models.Class(Data[0],Data[1]));
+                System.out.println(Data[1]);
+                listClass.add(new com.Models.Class(Data[0], Data[1]));
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -137,9 +283,9 @@ public class HandleFile<T> {
         Object temp;
         try {
             reader = new BufferedReader(new FileReader(fileSchedule));
-            while ((temp=reader.readLine()) != null) {
+            while ((temp = reader.readLine().replace("\uFEFF", "")) != null) {
                 String[] Data = ((String) temp).split(",");
-                listSchedule.add(new Schedule(Data[0],Data[1],Data[2],Data[3]));
+                listSchedule.add(new Schedule(Data[0], Data[1], Data[2], Data[3]));
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -157,15 +303,16 @@ public class HandleFile<T> {
         }
 
     }
+
     public ArrayList<User> ReadFileUser() {
         listUser = new ArrayList<>();
         BufferedReader reader = null;
         Object temp;
         try {
             reader = new BufferedReader(new FileReader(fileUser));
-            while ((temp=reader.readLine()) != null) {
+            while ((temp = reader.readLine().replace("\uFEFF", "")) != null) {
                 String[] Data = ((String) temp).split(",");
-                listUser.add(new User(Integer.parseInt(Data[0]),Data[1],Data[2]));
+                listUser.add(new User(Integer.parseInt(Data[0]), Data[1], Data[2]));
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -183,15 +330,16 @@ public class HandleFile<T> {
         }
 
     }
+
     public ArrayList<Login> ReadFileLogin() {
         listLogin = new ArrayList<>();
         BufferedReader reader = null;
         Object temp;
         try {
             reader = new BufferedReader(new FileReader(fileLogin));
-            while ((temp=reader.readLine()) != null) {
+            while ((temp = reader.readLine()) != null) {
                 String[] Data = ((String) temp).split(",");
-                listLogin.add(new Login(Data[0],Data[1],Data[2]));
+                listLogin.add(new Login(Data[0], Data[1], Data[2]));
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -209,16 +357,17 @@ public class HandleFile<T> {
         }
 
     }
+
     public ArrayList<StudenOfSchedule> ReadFileDiem() {
         ListScores = new ArrayList<>();
         BufferedReader reader = null;
         Object temp;
         try {
             reader = new BufferedReader(new FileReader(fileDiem));
-            while ((temp=reader.readLine()) != null) {
+            while ((temp = reader.readLine().replace("\uFEFF", "")) != null) {
                 String[] Data = ((String) temp).split(",");
-                ListScores.add(new StudenOfSchedule(Data[0],Data[1],Data[2],Data[3],
-                        Float.parseFloat(Data[4]),Float.parseFloat(Data[5]),Float.parseFloat(Data[6]),
+                ListScores.add(new StudenOfSchedule(Data[0], Data[1], Data[2], Data[3],
+                        Float.parseFloat(Data[4]), Float.parseFloat(Data[5]), Float.parseFloat(Data[6]),
                         Float.parseFloat(Data[7])));
             }
         } catch (FileNotFoundException e) {
@@ -237,12 +386,13 @@ public class HandleFile<T> {
         }
 
     }
-    public Boolean WriterFile(ArrayList<?> Data, File Writer){
-        BufferedWriter writerFile= null;
+
+    public Boolean WriterFile(ArrayList<?> Data, File Writer) {
+        BufferedWriter writerFile = null;
         try {
-            writerFile = new BufferedWriter(new FileWriter(Writer));
+            writerFile = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(Writer), StandardCharsets.UTF_8));
             int sz = Data.size();
-            for(int i = 0; i < sz; i++){
+            for (int i = 0; i < sz; i++) {
                 writerFile.write(Data.get(i).toString() + "\n");
             }
             writerFile.close();
@@ -252,12 +402,13 @@ public class HandleFile<T> {
         }
         return false;
     }
-    public Boolean WriterFileStudent(ArrayList<Student> Data){
-        BufferedWriter writerFile= null;
+
+    public Boolean WriterFileStudent(ArrayList<Student> Data) {
+        BufferedWriter writerFile = null;
         try {
             writerFile = new BufferedWriter(new FileWriter(fileStudent));
             int sz = Data.size();
-            for(int i = 0; i < sz; i++){
+            for (int i = 0; i < sz; i++) {
                 writerFile.write(Data.get(i).toString() + "\n");
             }
             writerFile.close();
@@ -267,6 +418,7 @@ public class HandleFile<T> {
         }
         return false;
     }
+
     public File getFileStudent() {
         return fileStudent;
     }

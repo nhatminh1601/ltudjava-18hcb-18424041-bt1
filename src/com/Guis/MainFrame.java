@@ -1,4 +1,5 @@
 package com.Guis;
+
 import com.Controllers.HandleFile;
 import com.Models.*;
 import com.Models.Class;
@@ -23,6 +24,7 @@ public class MainFrame extends JFrame {
     public static ArrayList<Login> listLogin;
     public static ArrayList<User> listUser;
 
+
     private Toolbar toolbar;
     public static ManagerStudent managerStudent;
     public static ManagerSchedule managerSchedule;
@@ -30,33 +32,39 @@ public class MainFrame extends JFrame {
     public static StudentLayout studentLayout;
     public static ResetPass resetPass;
 
-    public static int keyType; // keyType =0 là giáo vụ, keyType =1 là sinh viên
-    public  MainFrame() {
+    public static int keyType=0; // keyType =0 là giáo vụ, keyType =1 là sinh viên
+    public static int flag = 0;
+    public static String classNameS="";
+
+    public MainFrame() {
         processVar();
         setTitle("Quản Lý Sinh Viên");
         setMinimumSize(new Dimension(700, 400));
         setExtendedState(JFrame.MAXIMIZED_BOTH);
-        loginDialog = new LoginDialog(this);
-        studentLayout = new StudentLayout();
+        if (flag == 0) {
+            loginDialog = new LoginDialog(this);
+        }
         AddConponent();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        if(keyType==0){
+        if (keyType == 0) {
+            flag = 1;
             setJMenuBar(createMenuBar());
         }
-        if(keyType==1){
+        if (keyType == 1) {
+            flag = 1;
             setJMenuBar(menusv());
         }
 
     }
 
     private void AddConponent() {
-        if(keyType==0){
-            add(managerStudent,BorderLayout.CENTER);
-            add(toolbar,BorderLayout.NORTH);
+        if (keyType == 0) {
+            add(managerStudent, BorderLayout.CENTER);
+            add(toolbar, BorderLayout.NORTH);
             toolbar = new Toolbar(this);
         }
-        if(keyType ==1){
-            add(studentLayout,BorderLayout.CENTER);
+        if (keyType == 1) {
+            add(studentLayout, BorderLayout.CENTER);
         }
 
     }
@@ -67,9 +75,12 @@ public class MainFrame extends JFrame {
             listUser = handleFile.ReadFileUser();
             listClass = handleFile.ReadFileClass();
             listScores = handleFile.ReadFileDiem();
-            listStudent= handleFile.ReadFileStudent();
+            listStudent = handleFile.ReadFileStudent();
             listSchedule = handleFile.ReadFileSchedule();
-            listLogin = handleFile.ReadFileLogin();
+            if (flag == 0) {
+                listLogin = handleFile.ReadFileLogin();
+            }
+
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -80,7 +91,6 @@ public class MainFrame extends JFrame {
         managerSchedule = new ManagerSchedule();
         managerScores = new ManagerScores();
         resetPass = new ResetPass();
-
 
 
     }
@@ -109,10 +119,10 @@ public class MainFrame extends JFrame {
         exitItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int action=  JOptionPane.showConfirmDialog(MainFrame.this,
+                int action = JOptionPane.showConfirmDialog(MainFrame.this,
                         "Do you really want to exit the application?",
-                        "Comfirm Exit",JOptionPane.OK_CANCEL_OPTION);
-                if(action == JOptionPane.OK_OPTION){
+                        "Comfirm Exit", JOptionPane.OK_CANCEL_OPTION);
+                if (action == JOptionPane.OK_OPTION) {
                     System.exit(0);
                 }
 
@@ -121,27 +131,50 @@ public class MainFrame extends JFrame {
         exStudenItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(fileChooser.showOpenDialog(MainFrame.this) == JFileChooser.APPROVE_OPTION){
+                if (fileChooser.showOpenDialog(MainFrame.this) == JFileChooser.APPROVE_OPTION) {
                     String filePath = fileChooser.getSelectedFile().getPath();
-                    File file = new File(filePath);
-                  ArrayList<?> data= handleFile.ReadFile(file);
-                  handleFile.WriterFile(data,handleFile.getFileClass());
+                    if (handleFile.ReadWriteFileImStudent(filePath)) {
+                        managerStudent = new ManagerStudent();
+                        managerSchedule = new ManagerSchedule();
+                        managerScores = new ManagerScores();
+                        BorderLayout LayoutMater= (BorderLayout) getContentPane().getLayout();
+                        remove(LayoutMater.getLayoutComponent(BorderLayout.CENTER));
+                        if(keyType==0 || keyType ==1){
+                            add(managerStudent,BorderLayout.CENTER);
+                        }
+                        if(keyType==2){
+                            add(managerSchedule,BorderLayout.CENTER);
+                        }
+                        if(keyType==3){
+                            add(managerScores,BorderLayout.CENTER);
+                        }
+
+                        invalidate();
+                        validate();
+                        repaint();
+                        JOptionPane.showMessageDialog(null, "Import Thành công !");
+
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Import Thất bại công !");
+                    }
+                    repaint();
                 }
             }
         });
         windowMenu.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                BorderLayout LayoutMater= (BorderLayout) getContentPane().getLayout();
+                BorderLayout LayoutMater = (BorderLayout) getContentPane().getLayout();
                 remove(LayoutMater.getLayoutComponent(BorderLayout.CENTER));
-                add(resetPass,BorderLayout.CENTER);
+                add(resetPass, BorderLayout.CENTER);
                 invalidate();
                 validate();
                 repaint();
             }
         });
-        return menuBar; 
+        return menuBar;
     }
+
     private JMenuBar menusv() {
         JMenuBar menuBar = new JMenuBar();
         JMenu fileMenu = new JMenu("File");
@@ -159,10 +192,10 @@ public class MainFrame extends JFrame {
         exitItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int action=  JOptionPane.showConfirmDialog(MainFrame.this,
+                int action = JOptionPane.showConfirmDialog(MainFrame.this,
                         "Do you really want to exit the application?",
-                        "Comfirm Exit",JOptionPane.OK_CANCEL_OPTION);
-                if(action == JOptionPane.OK_OPTION){
+                        "Comfirm Exit", JOptionPane.OK_CANCEL_OPTION);
+                if (action == JOptionPane.OK_OPTION) {
                     System.exit(0);
                 }
 
@@ -171,9 +204,9 @@ public class MainFrame extends JFrame {
         windowMenu.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                BorderLayout LayoutMater= (BorderLayout) getContentPane().getLayout();
+                BorderLayout LayoutMater = (BorderLayout) getContentPane().getLayout();
                 remove(LayoutMater.getLayoutComponent(BorderLayout.CENTER));
-                add(resetPass,BorderLayout.CENTER);
+                add(resetPass, BorderLayout.CENTER);
                 invalidate();
                 validate();
                 repaint();
