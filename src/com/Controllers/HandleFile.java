@@ -149,6 +149,7 @@ public class HandleFile<T> {
 
             listClass.addAll(listImClass);
             WriterFile(listClass, fileClass);
+
             for (Student item : listStudent) {
                 for (Student n : listImStudent) {
                     if (n.getMssv().trim().equals(item.getMssv())) {
@@ -178,69 +179,174 @@ public class HandleFile<T> {
         listSchedule = ReadFileSchedule();
         listScores = new ArrayList<>();
         listScores = ReadFileDiem();
+        listStudent = ReadFileStudent();
 
         ArrayList<Schedule> listImSchedule = new ArrayList<>();
+        ArrayList<StudenOfSchedule> listImScores = new ArrayList<>();
+        ArrayList<Student> listStudentTemp = new ArrayList<>();
         ArrayList<Class> listImClass = new ArrayList<>();
         BufferedReader reader = null;
-        Object temp, lop;
+        Object temp;
 
         try {
-            reader = new BufferedReader(new FileReader(file));
-            if ((lop = reader.readLine().replace("\uFEFF", "")) != null) {
-                String[] malop = ((String) lop).split(",");
-                classNameS = malop[0];
-                listImClass.add(new Class(malop[0], malop[0]));
+            reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF8"));
+            String[] malop = ((String) reader.readLine()).replace("\uFEFF", "").split(",");
+            classNameS = malop[0];
+            listImClass.add(new Class(malop[0], malop[0]));
+            reader.readLine();
+            System.out.println("passlop");
+            while ((temp = reader.readLine()) != null) {
+                System.out.println(temp);
+                String[] Data = ((String) temp).split(",");
+                System.out.println(Data[0] + "-" + Data[1] + "-" + Data[2] + "-" + Data[3]);
+                listImSchedule.add(new Schedule(Data[1], malop[0], Data[2], Data[3]));
+            }
 
-                for (Class item : listClass) {
-                    for (Class n : listImClass) {
-                        if (n.getId().trim().equals(item.getName())) {
-                            listImClass.remove(n);
-                        }
+            // import lop
+            for (Class item : listClass) {
+                for (Class n : listImClass) {
+                    if (n.getId().trim().equals(item.getName())) {
+                        listImClass.remove(n);
+                        break;
                     }
                 }
-                if (listImClass.size() > 0) {
-                    listClass.addAll(listImClass);
-                    WriterFile(listClass, fileClass);
-                }
-
-                reader.readLine();
-                while ((temp = reader.readLine().replace("\uFEFF", "")) != null) {
-                    String[] Data = ((String) temp).split(",");
-                    // listImStudent.add(new Student(Data[1], Data[2], malop[0], Data[4], Data[3], Data[1]));
-                }
-
 
             }
-            return false;
 
+            listClass.addAll(listImClass);
+            WriterFile(listClass, fileClass);
+            // danh sách sinh viên
+            for (Student item : listStudent) {
+                if (item.getIdClass().equals(malop[0])) {
+                    listStudentTemp.add(item);
+                }
+            }
+
+            // import thời khóa biểu
+            for (Schedule item : listSchedule) {
+                for (Schedule n : listImSchedule) {
+                    System.out.println(item.getIdSubject());
+                    if (n.getIdSubject().equals(item.getIdSubject())) {
+                        System.out.println(n.getIdSubject() + " --test remo list schedule");
+                        listImSchedule.remove(n);
+                        break;
+                    }
+                }
+            }
+            listSchedule.addAll(listImSchedule);
+            WriterFile(listSchedule, fileSchedule);
+
+            for (Schedule item : listImSchedule) {
+                for (Student sv : listStudentTemp) {
+                    System.out.println(" import điểm" + sv.getMssv());
+                    listImScores.add(new StudenOfSchedule(sv.getMssv(),
+                            item.getIdSubject(), item.getSubject(), sv.getName(), 0, 0, 0, 0,0));
+                }
+            }
+            //status 0 chưa có điểm , 1 có điểm
+            listScores.addAll(listImScores);
+            WriterFile(listScores, fileDiem);
+
+            reader.close();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return false;
         } catch (FileNotFoundException e) {
             e.printStackTrace();
+            return false;
         } catch (IOException e) {
             e.printStackTrace();
             return false;
-        } finally {
-
-            try {
-//                for (Student item : listStudent) {
-//                    for (Student n : listImStudent) {
-//                        if (n.getMssv().trim().equals(item.getMssv())) {
-//                            listImStudent.remove(n);
-//                        }
-//                    }
-//                }
-//                listStudent.addAll(listImStudent);
-                WriterFile(listStudent, fileStudent);
-                reader.close();
-                return true;
-            } catch (IOException e) {
-                e.printStackTrace();
-                return false;
-            }
-
         }
 
-    }
 
+        return true;
+
+    }
+    public Boolean ReadWriteFileImScores(String path) {
+        File file = new File(path);
+        listSchedule = new ArrayList<>();
+        listSchedule = ReadFileSchedule();
+        listScores = new ArrayList<>();
+        listScores = ReadFileDiem();
+        listStudent = ReadFileStudent();
+
+        ArrayList<StudenOfSchedule> listImScores = new ArrayList<>();
+        ArrayList<Class> listImClass = new ArrayList<>();
+        BufferedReader reader = null;
+        Object temp, temp2;
+        String maMonHoc="";
+
+        try {
+            reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF8"));
+            String[] malop = ((String) reader.readLine()).replace("\uFEFF", "").split(",");
+            String[] list= malop[0].split("-");
+            classNameS = list[0];
+            maMonHoc= list[1];
+            listImClass.add(new Class(list[0], list[0]));
+            reader.readLine();
+            System.out.println("passlop");
+            while ((temp = reader.readLine()) != null) {
+                System.out.println(temp);
+                String[] Data = ((String) temp).split(",");
+                System.out.println(Data[0] + "-" + Data[1] + "-" + Data[2] + "-" + Data[3]);
+                listImScores.add(new StudenOfSchedule(Data[1],maMonHoc,"",Data[2]
+                ,Float.parseFloat(Data[3]),Float.parseFloat(Data[4]),Float.parseFloat(Data[5]),
+                        Float.parseFloat(Data[6]),1));
+            }
+
+            // import lop
+            for (Class item : listClass) {
+                for (Class n : listImClass) {
+                    if (n.getId().trim().equals(item.getName())) {
+                        listImClass.remove(n);
+                        break;
+                    }
+                }
+
+            }
+
+            listClass.addAll(listImClass);
+            WriterFile(listClass, fileClass);
+
+
+            for (StudenOfSchedule d : listImScores) {
+                int flag=0;
+                for (StudenOfSchedule item : listScores) {
+                    System.out.println(" import điểm" + d.getDiemTong());
+                   if(item.getIdStudent().trim().equals(d.getIdStudent().trim()) && item.getIdSchedule().trim().equals(d.getIdSchedule().trim())){
+                       item.setDiemGk(d.getDiemGk());
+                       item.setDiemCk(d.getDiemCk());
+                       item.setDiemKhac(d.getDiemKhac());
+                       item.setDiemTong(d.getDiemTong());
+                       item.setStatus(1);
+                       flag=1;
+                   }
+                }
+                if(flag==0){
+                    listScores.add(d);
+                }
+            }
+            //status 0 chưa có điểm , 1 có điểm
+            //listScores.addAll(listImScores);
+            WriterFile(listScores, fileDiem);
+
+            reader.close();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return false;
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return false;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+
+        return true;
+
+    }
     public ArrayList<com.Models.Class> ReadFileClass() {
         listClass = new ArrayList<com.Models.Class>();
         BufferedReader reader = null;
@@ -361,7 +467,7 @@ public class HandleFile<T> {
                 String[] Data = ((String) temp).split(",");
                 ListScores.add(new StudenOfSchedule(Data[0], Data[1], Data[2], Data[3],
                         Float.parseFloat(Data[4]), Float.parseFloat(Data[5]), Float.parseFloat(Data[6]),
-                        Float.parseFloat(Data[7])));
+                        Float.parseFloat(Data[7]),Integer.parseInt(Data[8])));
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();

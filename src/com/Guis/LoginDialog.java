@@ -8,6 +8,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import static com.Guis.MainFrame.listLogin;
+
 public class LoginDialog extends JDialog {
     private JLabel nameLabel, passLabel, optionLabel, Error;
     private JTextField nameField;
@@ -32,6 +34,7 @@ public class LoginDialog extends JDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Login data = handleLogin.compare(passField.getText(), nameField.getText(), optionComboBox.getSelectedIndex());
+                listLogin.add(data);
                 if (data != null) {
                     setVisible(false);
                     parent.setVisible(true);

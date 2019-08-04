@@ -12,7 +12,7 @@ public class Toolbar extends JPanel {
     private JButton dmmh;
     private JButton dsl;
     private JButton logOut;
-    static int KeyAction = 1;
+
 
     private JFrame frame;
 

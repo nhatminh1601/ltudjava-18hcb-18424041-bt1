@@ -9,8 +9,9 @@ public class StudenOfSchedule {
     private float diemCk;
     private float diemKhac;
     private float diemTong;
+    private int status;
 
-    public StudenOfSchedule(String idStudent, String idSchedule, String subject, String name, float diemGk, float diemCk, float diemKhac, float diemTong) {
+    public StudenOfSchedule(String idStudent, String idSchedule, String subject, String name, float diemGk, float diemCk, float diemKhac, float diemTong, int status) {
         IdStudent = idStudent;
         IdSchedule = idSchedule;
         this.subject = subject;
@@ -19,7 +20,7 @@ public class StudenOfSchedule {
         this.diemCk = diemCk;
         this.diemKhac = diemKhac;
         this.diemTong = diemTong;
-
+        this.status = status;
     }
 
     public String getIdStudent() {
@@ -86,13 +87,20 @@ public class StudenOfSchedule {
         this.diemTong = diemTong;
     }
 
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
 
     @Override
     public String toString() {
-        return IdStudent + "," + IdSchedule + "," + name + ","
+        return IdStudent + "," + IdSchedule + "," +subject +","+ name + ","
                 + diemGk + "," +
-                diemCk + "," + "," +
+                diemCk + "," +
                 diemKhac + "," +
-                diemTong;
+                diemTong+","+ status;
     }
 }

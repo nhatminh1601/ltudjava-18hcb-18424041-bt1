@@ -5,7 +5,6 @@ import com.Models.StudenOfSchedule;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.ActionListener;
 
 import static com.Guis.MainFrame.listLogin;
 import static com.Guis.MainFrame.listScores;
@@ -50,12 +49,14 @@ public class StudentLayout extends JPanel {
         model.addColumn("Điểm Khác");
         model.addColumn("Điểm Tổng");
         for (StudenOfSchedule item : listScores) {
-
-            if (item.getIdStudent().toString().trim().equals(listLogin.get(0).getUserName().toString().trim())) {
-                String[] row = {item.getIdSchedule() + " ", item.getSubject() + " ", item.getDiemGk() + ""
-                        , item.getDiemCk() + " ", item.getDiemKhac() + " ", item.getDiemTong() + " "};
-                model.addRow(row);
+            if(listLogin.size()>0){
+                if (item.getIdStudent().trim().equals(listLogin.get(0).getUserName().trim())) {
+                    String[] row = {item.getIdSchedule() + " ", item.getSubject() + " ", item.getDiemGk() + ""
+                            , item.getDiemCk() + " ", item.getDiemKhac() + " ", item.getDiemTong() + " "};
+                    model.addRow(row);
+                }
             }
+
         }
         sc = new JScrollPane(tableStudent, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
@@ -79,11 +80,4 @@ public class StudentLayout extends JPanel {
 
     }
 
-    public Box getMain() {
-        return main;
-    }
-
-    public void setMain(Box main) {
-        this.main = main;
-    }
 }

@@ -32,9 +32,11 @@ public class MainFrame extends JFrame {
     public static StudentLayout studentLayout;
     public static ResetPass resetPass;
 
-    public static int keyType=0; // keyType =0 là giáo vụ, keyType =1 là sinh viên
+    public static int keyType = 0; // keyType =0 là giáo vụ, keyType =1 là sinh viên
     public static int flag = 0;
-    public static String classNameS="";
+    public static String classNameS = "";
+    public static int KeyAction = 1;
+    public static String KeyMaMonHoc = "";
 
     public MainFrame() {
         processVar();
@@ -64,6 +66,7 @@ public class MainFrame extends JFrame {
             toolbar = new Toolbar(this);
         }
         if (keyType == 1) {
+            studentLayout = new StudentLayout();
             add(studentLayout, BorderLayout.CENTER);
         }
 
@@ -77,9 +80,8 @@ public class MainFrame extends JFrame {
             listScores = handleFile.ReadFileDiem();
             listStudent = handleFile.ReadFileStudent();
             listSchedule = handleFile.ReadFileSchedule();
-            if (flag == 0) {
-                listLogin = handleFile.ReadFileLogin();
-            }
+
+            listLogin = handleFile.ReadFileLogin();
 
 
         } catch (IOException e) {
@@ -103,12 +105,14 @@ public class MainFrame extends JFrame {
         JMenuItem exStudenItem = new JMenuItem("Import Student");
         JMenuItem exScoresItem = new JMenuItem("Import Scores");
         JMenuItem exScheduleItem = new JMenuItem("Import Schedule");
+        JMenuItem Logout = new JMenuItem("Logout");
         JMenuItem exitItem = new JMenuItem("Exit");
         fileMenu.add(exStudenItem);
         fileMenu.add(exScoresItem);
         fileMenu.add(exScheduleItem);
         fileMenu.addSeparator();
         fileMenu.add(windowMenu);
+        fileMenu.add(Logout);
         fileMenu.add(exitItem);
 
 
@@ -137,16 +141,82 @@ public class MainFrame extends JFrame {
                         managerStudent = new ManagerStudent();
                         managerSchedule = new ManagerSchedule();
                         managerScores = new ManagerScores();
-                        BorderLayout LayoutMater= (BorderLayout) getContentPane().getLayout();
+                        BorderLayout LayoutMater = (BorderLayout) getContentPane().getLayout();
                         remove(LayoutMater.getLayoutComponent(BorderLayout.CENTER));
-                        if(keyType==0 || keyType ==1){
-                            add(managerStudent,BorderLayout.CENTER);
+                        if (keyType == 0 || keyType == 1) {
+                            add(managerStudent, BorderLayout.CENTER);
                         }
-                        if(keyType==2){
-                            add(managerSchedule,BorderLayout.CENTER);
+                        if (keyType == 2) {
+                            add(managerSchedule, BorderLayout.CENTER);
                         }
-                        if(keyType==3){
-                            add(managerScores,BorderLayout.CENTER);
+                        if (keyType == 3) {
+                            add(managerScores, BorderLayout.CENTER);
+                        }
+
+                        invalidate();
+                        validate();
+                        repaint();
+                        JOptionPane.showMessageDialog(null, "Import Thành công !");
+
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Import Thất bại công !");
+                    }
+                    repaint();
+                }
+            }
+        });
+        exScheduleItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (fileChooser.showOpenDialog(MainFrame.this) == JFileChooser.APPROVE_OPTION) {
+                    String filePath = fileChooser.getSelectedFile().getPath();
+                    if (handleFile.ReadWriteFileImSchedule(filePath)) {
+                        managerStudent = new ManagerStudent();
+                        managerSchedule = new ManagerSchedule();
+                        managerScores = new ManagerScores();
+                        BorderLayout LayoutMater = (BorderLayout) getContentPane().getLayout();
+                        remove(LayoutMater.getLayoutComponent(BorderLayout.CENTER));
+                        if (KeyAction == 0 || KeyAction == 1) {
+                            add(managerStudent, BorderLayout.CENTER);
+                        }
+                        if (KeyAction == 2) {
+                            add(managerSchedule, BorderLayout.CENTER);
+                        }
+                        if (KeyAction == 3) {
+                            add(managerScores, BorderLayout.CENTER);
+                        }
+
+                        invalidate();
+                        validate();
+                        repaint();
+                        JOptionPane.showMessageDialog(null, "Import Thành công !");
+
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Import Thất bại công !");
+                    }
+                    repaint();
+                }
+            }
+        });
+        exScoresItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (fileChooser.showOpenDialog(MainFrame.this) == JFileChooser.APPROVE_OPTION) {
+                    String filePath = fileChooser.getSelectedFile().getPath();
+                    if (handleFile.ReadWriteFileImScores(filePath)) {
+                        managerStudent = new ManagerStudent();
+                        managerSchedule = new ManagerSchedule();
+                        managerScores = new ManagerScores();
+                        BorderLayout LayoutMater = (BorderLayout) getContentPane().getLayout();
+                        remove(LayoutMater.getLayoutComponent(BorderLayout.CENTER));
+                        if (keyType == 0 || keyType == 1) {
+                            add(managerStudent, BorderLayout.CENTER);
+                        }
+                        if (keyType == 2) {
+                            add(managerSchedule, BorderLayout.CENTER);
+                        }
+                        if (keyType == 3) {
+                            add(managerScores, BorderLayout.CENTER);
                         }
 
                         invalidate();
@@ -172,6 +242,18 @@ public class MainFrame extends JFrame {
                 repaint();
             }
         });
+        Logout.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                keyType = 0; // keyType =0 là giáo vụ, keyType =1 là sinh viên
+                flag = 0;
+                classNameS = "";
+                KeyAction = 1;
+                KeyMaMonHoc = "";
+                setVisible(false);
+                new MainFrame();
+            }
+        });
         return menuBar;
     }
 
@@ -179,9 +261,11 @@ public class MainFrame extends JFrame {
         JMenuBar menuBar = new JMenuBar();
         JMenu fileMenu = new JMenu("File");
         JMenuItem windowMenu = new JMenuItem("Change Password");
+        JMenuItem Logout = new JMenuItem("Logout");
         JMenuItem exitItem = new JMenuItem("Exit");
 
         fileMenu.add(windowMenu);
+        fileMenu.add(Logout);
         fileMenu.add(exitItem);
 
 
@@ -210,6 +294,18 @@ public class MainFrame extends JFrame {
                 invalidate();
                 validate();
                 repaint();
+            }
+        });
+        Logout.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                keyType = 0; // keyType =0 là giáo vụ, keyType =1 là sinh viên
+                flag = 0;
+                classNameS = "";
+                KeyAction = 1;
+                KeyMaMonHoc = "";
+                setVisible(false);
+                new MainFrame();
             }
         });
         return menuBar;
